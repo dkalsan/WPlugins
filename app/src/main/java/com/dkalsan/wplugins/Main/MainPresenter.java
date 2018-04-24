@@ -26,7 +26,6 @@ public class MainPresenter implements MainContract.Presenter, NumberPicker.OnVal
 
     public void setPluginDownloadLimit(Context context, FragmentManager fragmentManager) {
         if(sharedPrefsHelper.get("firstTime", true)) {
-            sharedPrefsHelper.put("limit", 20);
             sharedPrefsHelper.put("firstTime", false);
             LimitPickerDialog limitPickerDialog = new LimitPickerDialog();
             limitPickerDialog.setValueChangeListener(this);

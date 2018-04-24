@@ -5,18 +5,18 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.NumberPicker;
 
 public class LimitPickerDialog extends DialogFragment {
     private NumberPicker.OnValueChangeListener valueChangeListener;
+    private NumberPicker numberPicker;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final NumberPicker numberPicker = new NumberPicker(getActivity());
+        numberPicker = new NumberPicker(getActivity());
 
         numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(100);
+        numberPicker.setMaxValue(200);
         numberPicker.setWrapSelectorWheel(false);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -40,8 +40,7 @@ public class LimitPickerDialog extends DialogFragment {
 
     @Override
     public void onCancel(DialogInterface dialog) {
-
-        super.onCancel(dialog);
+        valueChangeListener.onValueChange(numberPicker, 19, 20);
     }
 
     public void setValueChangeListener(NumberPicker.OnValueChangeListener valueChangeListener) {
