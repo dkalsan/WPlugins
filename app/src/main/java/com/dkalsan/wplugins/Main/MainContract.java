@@ -9,6 +9,8 @@ public interface MainContract {
         void showDialog();
         void initRecyclerView();
         RecyclerView getRecyclerView();
+        void showProgressBar();
+        void hideProgressBar();
     }
 
     interface Presenter {

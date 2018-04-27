@@ -4,13 +4,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 
 import com.dkalsan.wplugins.R;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View, NumberPicker.OnValueChangeListener {
     private MainContract.Presenter presenter;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +21,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setContentView(R.layout.activity_main);
 
         presenter = new MainPresenter(this,
+                this,
                 new SharedPrefsHelper(getSharedPreferences("prefs", MODE_PRIVATE)),
                 getFragmentManager());
 
+        progressBar = findViewById(R.id.progressBar);
         initRecyclerView();
         presenter.initApplication();
     }
@@ -45,5 +50,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         LimitPickerDialog limitPickerDialog = new LimitPickerDialog();
         limitPickerDialog.setValueChangeListener(this);
         limitPickerDialog.show(getFragmentManager(), "limitPicker");
+    }
+
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 }
