@@ -2,13 +2,15 @@ package com.dkalsan.wplugins.Main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.NumberPicker;
 
 import com.dkalsan.wplugins.R;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity implements MainContract.View, NumberPicker.OnValueChangeListener {
     private MainContract.Presenter presenter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,15 +19,31 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         presenter = new MainPresenter(this,
                 new SharedPrefsHelper(getSharedPreferences("prefs", MODE_PRIVATE)),
-                new PluginDownloader(),
-                new ImageDownloader()
-                );
+                getFragmentManager());
 
-        presenter.setPluginDownloadLimit(this, getFragmentManager());
+        initRecyclerView();
+        presenter.initApplication();
     }
 
-    public void checkValue(View view) {
-        presenter.check();
+    public void initRecyclerView() {
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
+    @Override
+    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+        presenter.updatePluginsPerPagePreference(i1);
+    }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public void showDialog() {
+        LimitPickerDialog limitPickerDialog = new LimitPickerDialog();
+        limitPickerDialog.setValueChangeListener(this);
+        limitPickerDialog.show(getFragmentManager(), "limitPicker");
+    }
 }
