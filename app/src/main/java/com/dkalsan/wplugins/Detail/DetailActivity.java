@@ -31,7 +31,11 @@ public class DetailActivity extends AppCompatActivity implements DetailContract.
         presenter = new DetailPresenter(this, this);
 
         Button homepageButton = findViewById(R.id.homepageButton);
-        homepageButton.setOnClickListener(this);
+        if(homepageUrl != null) {
+            homepageButton.setOnClickListener(this);
+        } else {
+            homepageButton.setVisibility(View.GONE);
+        }
         requestStoragePermissions();
 
         if(hasWritePermission())
