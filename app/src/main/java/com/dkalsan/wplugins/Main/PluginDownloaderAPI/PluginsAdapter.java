@@ -21,10 +21,19 @@ import java.util.List;
 public class PluginsAdapter extends RecyclerView.Adapter<PluginsAdapter.ViewHolder> {
     private List<Plugin> plugins;
     private RequestManager glide;
+    private OnItemClickListener onItemClickListener;
 
     public PluginsAdapter(List<Plugin> plugins, RequestManager glide) {
         this.plugins = plugins;
         this.glide = glide;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -35,19 +44,21 @@ public class PluginsAdapter extends RecyclerView.Adapter<PluginsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(PluginsAdapter.ViewHolder holder, int position) {
-        holder.titleTV.setText(plugins.get(position).getName());
+        if(holder != null) {
+            holder.titleTV.setText(plugins.get(position).getName());
 
-        if(plugins.get(position).getScreenshots() != null) {
-            String url = plugins.get(position).getScreenshots().get1().getSrc();
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .priority(Priority.HIGH);
+            if(plugins.get(position).getScreenshots() != null) {
+                String url = plugins.get(position).getScreenshots().get1().getSrc();
+                RequestOptions options = new RequestOptions()
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .priority(Priority.HIGH);
 
-            glide.load(url).apply(options).into(holder.screenshotView);
-        } else {
-            glide.clear(holder.screenshotView);
-            holder.screenshotView.setImageResource(R.drawable.default_screenshot);
+                glide.load(url).apply(options).into(holder.screenshotView);
+            } else {
+                glide.clear(holder.screenshotView);
+                holder.screenshotView.setImageResource(R.drawable.default_screenshot);
+            }
         }
     }
 
@@ -56,15 +67,24 @@ public class PluginsAdapter extends RecyclerView.Adapter<PluginsAdapter.ViewHold
         return plugins.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView titleTV;
         private ImageView screenshotView;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
 
             titleTV = view.findViewById(R.id.titleTV);
             screenshotView = view.findViewById(R.id.screenshotView);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if(onItemClickListener != null && position != RecyclerView.NO_POSITION) {
+                onItemClickListener.onItemClick(view, position);
+            }
         }
     }
 }

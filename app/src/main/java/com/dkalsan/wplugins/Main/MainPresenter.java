@@ -3,6 +3,7 @@ package com.dkalsan.wplugins.Main;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dkalsan.wplugins.Main.PluginDownloaderAPI.CustomTypeAdapterFactory;
@@ -71,7 +72,13 @@ public class MainPresenter implements MainContract.Presenter {
             @Override
             public void onResponse(Call<PluginsApiResponse> call, Response<PluginsApiResponse> response) {
                 resultPlugins = response.body().getPlugins();
+
+                PluginsAdapter.OnItemClickListener recyclerViewOnItemClickListener = (view, position) -> {
+                    Log.i("position clicked", String.valueOf(position));
+                };
+
                 pluginsAdapter = new PluginsAdapter(resultPlugins, Glide.with(context));
+                pluginsAdapter.setOnItemClickListener(recyclerViewOnItemClickListener);
                 mainView.getRecyclerView().setAdapter(pluginsAdapter);
                 mainView.hideProgressBar();
             }
