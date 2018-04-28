@@ -74,7 +74,7 @@ public class MainPresenter implements MainContract.Presenter {
                     resultPlugins = response.body().getPlugins();
 
                     PluginsAdapter.OnItemClickListener recyclerViewOnItemClickListener = (view, position) -> {
-                        downloadPluginZIP(resultPlugins.get(position).getHomepage(), resultPlugins.get(position).getDownloadLink());
+                        downloadPluginZIP(resultPlugins.get(position).getHomepage(), resultPlugins.get(position).getDownloadLink(), resultPlugins.get(position).getName());
                     };
 
                     pluginsAdapter = new PluginsAdapter(resultPlugins, Glide.with(context));
@@ -91,10 +91,11 @@ public class MainPresenter implements MainContract.Presenter {
         });
     }
 
-    private void downloadPluginZIP(String homepageUrl, String zipDownloadUrl) {
+    private void downloadPluginZIP(String homepageUrl, String zipDownloadUrl, String filename) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("homepageUrl", homepageUrl);
         intent.putExtra("zipUrl", zipDownloadUrl);
+        intent.putExtra("fileName", filename);
         context.startActivity(intent);
     }
 }

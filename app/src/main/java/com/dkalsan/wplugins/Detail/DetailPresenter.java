@@ -14,11 +14,11 @@ public class DetailPresenter implements DetailContract.Presenter {
         this.context = context;
     }
 
-    public void downloadZip(String zipUrl) {
+    public void downloadZip(String zipUrl, String filename) {
             Uri uri = Uri.parse(zipUrl);
 
             DownloadManager.Request request = new DownloadManager.Request(uri);
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "pluginzip");
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
             DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);

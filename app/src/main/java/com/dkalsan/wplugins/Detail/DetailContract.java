@@ -6,6 +6,6 @@ public interface DetailContract {
     }
 
     interface Presenter {
-        void downloadZip(String zipUrl);
+        void downloadZip(String zipUrl, String filename);
     }
 }
