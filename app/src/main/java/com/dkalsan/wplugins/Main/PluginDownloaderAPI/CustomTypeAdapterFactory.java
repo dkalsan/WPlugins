@@ -27,15 +27,15 @@ public class CustomTypeAdapterFactory implements TypeAdapterFactory {
                 try {
                     return delegate.read(in);
                 } catch (IOException e) {
-                    Log.w("Adapter Factory", "IOException. Value skipped");
+                    Log.w("TypeAdapterFactory", "IOException");
                     in.skipValue();
                     return null;
                 } catch (IllegalStateException e) {
-                    Log.w("Adapter Factory", "IllegalStateException. Value skipped");
+                    Log.w("TypeAdapterFactory", "IllegalStateException");
                     in.skipValue();
                     return null;
                 } catch (JsonSyntaxException e) {
-                    Log.w("Adapter Factory", "JsonSyntaxException. Value skipped");
+                    Log.w("TypeAdapterFactory", "JsonSyntaxException");
                     in.skipValue();
                     return null;
                 }

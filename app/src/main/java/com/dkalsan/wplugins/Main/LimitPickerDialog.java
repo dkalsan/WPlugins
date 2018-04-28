@@ -21,18 +21,8 @@ public class LimitPickerDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Izberi število vtičnikov.")
-                .setPositiveButton("Nastavi", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        valueChangeListener.onValueChange(numberPicker, numberPicker.getValue(), numberPicker.getValue());
-                    }
-                })
-                .setNegativeButton("Prekliči", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        valueChangeListener.onValueChange(numberPicker, 19, 20);
-                    }
-                })
+                .setPositiveButton("Nastavi", (dialogInterface, i) -> valueChangeListener.onValueChange(numberPicker, numberPicker.getValue(), numberPicker.getValue()))
+                .setNegativeButton("Prekliči", (dialogInterface, i) -> valueChangeListener.onValueChange(numberPicker, 19, 20))
                 .setView(numberPicker);
 
         return builder.create();

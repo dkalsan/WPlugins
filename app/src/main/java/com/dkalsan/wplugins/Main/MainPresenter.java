@@ -1,11 +1,11 @@
 package com.dkalsan.wplugins.Main;
 
-import android.app.FragmentManager;
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.dkalsan.wplugins.Detail.DetailActivity;
 import com.dkalsan.wplugins.Main.PluginDownloaderAPI.CustomTypeAdapterFactory;
 import com.dkalsan.wplugins.Main.PluginDownloaderAPI.Model.Plugin;
 import com.dkalsan.wplugins.Main.PluginDownloaderAPI.Model.PluginsApiResponse;
@@ -31,8 +31,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     public MainPresenter(MainContract.View mainView,
                          Context context,
-                         SharedPrefsHelper sharedPrefsHelper,
-                         FragmentManager fragmentManager) {
+                         SharedPrefsHelper sharedPrefsHelper) {
         this.mainView = mainView;
         this.context = context;
         this.sharedPrefsHelper = sharedPrefsHelper;
@@ -70,23 +69,32 @@ public class MainPresenter implements MainContract.Presenter {
 
         response.enqueue(new Callback<PluginsApiResponse>() {
             @Override
-            public void onResponse(Call<PluginsApiResponse> call, Response<PluginsApiResponse> response) {
-                resultPlugins = response.body().getPlugins();
+            public void onResponse(@NonNull Call<PluginsApiResponse> call, @NonNull Response<PluginsApiResponse> response) {
+                if(response.body() != null) {
+                    resultPlugins = response.body().getPlugins();
 
-                PluginsAdapter.OnItemClickListener recyclerViewOnItemClickListener = (view, position) -> {
-                    Log.i("name", resultPlugins.get(position).getDownloadLink());
-                };
+                    PluginsAdapter.OnItemClickListener recyclerViewOnItemClickListener = (view, position) -> {
+                        downloadPluginZIP(resultPlugins.get(position).getHomepage(), resultPlugins.get(position).getDownloadLink());
+                    };
 
-                pluginsAdapter = new PluginsAdapter(resultPlugins, Glide.with(context));
-                pluginsAdapter.setOnItemClickListener(recyclerViewOnItemClickListener);
-                mainView.getRecyclerView().setAdapter(pluginsAdapter);
-                mainView.hideProgressBar();
+                    pluginsAdapter = new PluginsAdapter(resultPlugins, Glide.with(context));
+                    pluginsAdapter.setOnItemClickListener(recyclerViewOnItemClickListener);
+                    mainView.getRecyclerView().setAdapter(pluginsAdapter);
+                    mainView.hideProgressBar();
+                }
             }
 
             @Override
-            public void onFailure(Call<PluginsApiResponse> call, Throwable t) {
-                //showErrorSnackbar
+            public void onFailure(@NonNull Call<PluginsApiResponse> call, @NonNull Throwable t) {
+                mainView.showErrorToast();
             }
         });
+    }
+
+    private void downloadPluginZIP(String homepageUrl, String zipDownloadUrl) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("homepageUrl", homepageUrl);
+        intent.putExtra("zipUrl", zipDownloadUrl);
+        context.startActivity(intent);
     }
 }

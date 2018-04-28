@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WPlugins</string>
+    <string name="homepage">Homepage</string>
+    <string name="imageViewDescriptor">Plugin screenshot</string>
 </resources>

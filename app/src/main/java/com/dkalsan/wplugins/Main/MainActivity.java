@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.dkalsan.wplugins.R;
 
@@ -22,8 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         presenter = new MainPresenter(this,
                 this,
-                new SharedPrefsHelper(getSharedPreferences("prefs", MODE_PRIVATE)),
-                getFragmentManager());
+                new SharedPrefsHelper(getSharedPreferences("prefs", MODE_PRIVATE)));
 
         progressBar = findViewById(R.id.progressBar);
         initRecyclerView();
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         limitPickerDialog.show(getFragmentManager(), "limitPicker");
     }
 
+
     public void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
@@ -60,5 +61,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    public void showErrorToast() {
+        Toast.makeText(this, "Error occured while fetching data from Wordpress API", Toast.LENGTH_SHORT).show();
     }
 }

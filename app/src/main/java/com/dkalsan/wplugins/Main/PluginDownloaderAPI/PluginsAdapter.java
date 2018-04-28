@@ -1,6 +1,6 @@
 package com.dkalsan.wplugins.Main.PluginDownloaderAPI;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,29 +35,28 @@ public class PluginsAdapter extends RecyclerView.Adapter<PluginsAdapter.ViewHold
         this.onItemClickListener = onItemClickListener;
     }
 
+    @NonNull
     @Override
-    public PluginsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PluginsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PluginsAdapter.ViewHolder holder, int position) {
-        if(holder != null) {
-            holder.titleTV.setText(plugins.get(position).getName());
+    public void onBindViewHolder(@NonNull PluginsAdapter.ViewHolder holder, int position) {
+        holder.titleTV.setText(plugins.get(position).getName());
 
-            if(plugins.get(position).getScreenshots() != null) {
-                String url = plugins.get(position).getScreenshots().get1().getSrc();
-                RequestOptions options = new RequestOptions()
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .priority(Priority.HIGH);
+        if(plugins.get(position).getScreenshots() != null) {
+            String url = plugins.get(position).getScreenshots().get1().getSrc();
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.HIGH);
 
-                glide.load(url).apply(options).into(holder.screenshotView);
-            } else {
-                glide.clear(holder.screenshotView);
-                holder.screenshotView.setImageResource(R.drawable.default_screenshot);
-            }
+            glide.load(url).apply(options).into(holder.screenshotView);
+        } else {
+            glide.clear(holder.screenshotView);
+            holder.screenshotView.setImageResource(R.drawable.default_screenshot);
         }
     }
 
