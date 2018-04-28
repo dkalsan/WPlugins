@@ -74,7 +74,7 @@ public class MainPresenter implements MainContract.Presenter {
                 resultPlugins = response.body().getPlugins();
 
                 PluginsAdapter.OnItemClickListener recyclerViewOnItemClickListener = (view, position) -> {
-                    Log.i("position clicked", String.valueOf(position));
+                    Log.i("name", resultPlugins.get(position).getDownloadLink());
                 };
 
                 pluginsAdapter = new PluginsAdapter(resultPlugins, Glide.with(context));
@@ -85,7 +85,7 @@ public class MainPresenter implements MainContract.Presenter {
 
             @Override
             public void onFailure(Call<PluginsApiResponse> call, Throwable t) {
-                Log.i("pl", "err");
+                //showErrorSnackbar
             }
         });
     }

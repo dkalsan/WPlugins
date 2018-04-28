@@ -10,6 +10,9 @@ public class Plugin {
     @SerializedName("homepage")
     @Expose
     private String homepage;
+    @SerializedName("download_link")
+    @Expose
+    private String downloadLink;
     @SerializedName("screenshots")
     @Expose
     private Screenshots screenshots;
@@ -28,6 +31,14 @@ public class Plugin {
 
     public void setHomepage(String homepage) {
         this.homepage = homepage;
+    }
+
+    public String getDownloadLink() {
+        return downloadLink;
+    }
+
+    public void setDownloadLink(String downloadLink) {
+        this.downloadLink = downloadLink;
     }
 
     public Screenshots getScreenshots() {
